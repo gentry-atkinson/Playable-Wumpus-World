@@ -117,7 +117,7 @@ class WumpusWorld:
     self.screen.blit(percepts, (300, 649))
 
     pygame.display.update()
-    pygame.time.delay(500)
+    pygame.time.delay(250)
 
   # Helper function to draw an entity at a specified location.
   def __draw_entity(self, name: str, location: tuple, width=1, height=1):

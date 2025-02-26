@@ -31,6 +31,7 @@
 """
 
 from wumpus import WumpusWorld
+from random import choice
 
 def pick_move(wordl: WumpusWorld) -> str:
-    return 'forward'
+    return choice(["forward", "left", "right", "grab", "climb", "shoot"])

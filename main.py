@@ -31,7 +31,7 @@
     Possible Actions: "forward", "left", "right", "grab", "climb", "shoot"
 """
 
-COMPUTER_CONTROL = False
+COMPUTER_CONTROL = True
 
 from wumpus import WumpusWorld
 if COMPUTER_CONTROL:
