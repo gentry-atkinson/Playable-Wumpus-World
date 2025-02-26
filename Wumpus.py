@@ -6,6 +6,22 @@ import pygame
 from random import randint
 
 IMG = "imgs"
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 800
+
+GRID_ROWS = {
+  1 : 475,
+  2 : 330,
+  3 : 187,
+  4 : 42
+}
+
+GRID_COLS = {
+  1 : 118,
+  2 : 162,
+  3 : 405,
+  4 : 548
+}
 
 
 # A class representing the Wumpus World game environment.
@@ -28,6 +44,7 @@ class WumpusWorld:
     self.ammo = 1
     self.died = False
     self.__load_images()
+    self.__load_screen()
     self.perceive()
 
   def __load_images(self):
@@ -38,7 +55,10 @@ class WumpusWorld:
       'stink' : pygame.image.load(os.path.join(IMG, 'stink.png')),
       'gold' : pygame.image.load(os.path.join(IMG, 'gold.png')),
       'pit' : pygame.image.load(os.path.join(IMG, 'pit.png')),
-    }    
+    }
+
+  def __load_screen(self):
+       self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT)) 
 
   # Randomly generate pit locations, avoiding start and hazard locations.
   def __generate_pits(self):
@@ -52,36 +72,23 @@ class WumpusWorld:
 
   # Visualize the current state of the Wumpus World environment.
   def draw(self):
-    #plt.figure(figsize=(4, 4))
-    #ax = plt.gca()
-    #ax.get_xaxis().set_visible(False)
-    #ax.get_yaxis().set_visible(False)
-    #ax.set_xlim((0, self.SIZE))
-    #ax.set_ylim((0, self.SIZE))
 
     # Draw grid lines.
-    for i in range(self.SIZE + 1):
-      #plt.axvline(x=i, color="black", linewidth=3.0)
-      #plt.axhline(y=i, color="black", linewidth=3.0)
-      pass
+    self.__draw_entity("world", (0,0))
 
     # Draw entities in the environment.
-    self.__draw_entity(IMG + "/player.png", self.player_loc, 0.8, 0.9)
-    self.__draw_entity(IMG + "/wumpus.png", self.__wumpus_loc, 1, 1)
-    self.__draw_entity(IMG + "/gold.png", self.__gold_loc, 1, 0.5)
-    self.__draw_entity(IMG + "/start.png", self.start_loc, 1, 0.3)
+    self.__draw_entity("player", (GRID_ROWS[self.player_loc[0]], GRID_COLS[self.player_loc[1]]))
+    self.__draw_entity("wumpus", (GRID_ROWS[self.__wumpus_loc[0]], GRID_COLS[self.__wumpus_locc[1]]))
+    self.__draw_entity("gold", (GRID_ROWS[self.__gold_loc[0]], GRID_COLS[self.__gold_loc[1]]))
     for pit in self.__pits:
-      self.__draw_entity(IMG + "/pit.png", pit, 1, 1)
+      self.__draw_entity(IMG + "pit", (GRID_ROWS[pit[0]], GRID_COLS[pit[1]]))
 
-    #plt.tight_layout()
-    # plt.savefig("world.png")
-    #plt.show()
+    pygame.display.update()
 
   # Helper function to draw an entity at a specified location.
-  def __draw_entity(self, img_path, location, width, height):
+  def __draw_entity(self, name: str, location: tuple, width=1, height=1):
     if location:
-      icon_x, icon_y = float(location[0] - 1), float(location[1] - 1)
-      #plt.imshow(mpimg.imread(img_path), extent=(icon_x, icon_x + width, icon_y, icon_y + height))
+      self.screen.blit(self.imgs[name], location)
 
   # Update the player's observations based on the current state.
   def perceive(self):

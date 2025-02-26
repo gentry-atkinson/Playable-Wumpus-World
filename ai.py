@@ -32,5 +32,5 @@
 
 from wumpus import WumpusWorld
 
-def pick_move(wordl: WumpusWorld):
-    pass
+def pick_move(wordl: WumpusWorld) -> str:
+    return 'forward'
