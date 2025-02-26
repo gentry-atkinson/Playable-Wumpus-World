@@ -45,7 +45,17 @@ class WumpusWorld:
     self.died = False
     self.__load_images()
     self.__load_screen()
+    self.__init_game()
     self.perceive()
+
+  def __init_game(self):
+    # Init Game
+    pygame.init()
+    pygame.display.set_caption('Wumpus World')
+    clock = pygame.time.Clock()
+    running = True
+    pygame.key.set_repeat()
+    self.draw()
 
   def __load_images(self):
     self.imgs = {
@@ -55,6 +65,7 @@ class WumpusWorld:
       'stink' : pygame.image.load(os.path.join(IMG, 'stink.png')),
       'gold' : pygame.image.load(os.path.join(IMG, 'gold.png')),
       'pit' : pygame.image.load(os.path.join(IMG, 'pit.png')),
+      'player' : pygame.image.load(os.path.join(IMG, 'player.png')),
     }
 
   def __load_screen(self):
@@ -78,10 +89,10 @@ class WumpusWorld:
 
     # Draw entities in the environment.
     self.__draw_entity("player", (GRID_ROWS[self.player_loc[0]], GRID_COLS[self.player_loc[1]]))
-    self.__draw_entity("wumpus", (GRID_ROWS[self.__wumpus_loc[0]], GRID_COLS[self.__wumpus_locc[1]]))
+    self.__draw_entity("wumpus", (GRID_ROWS[self.__wumpus_loc[0]], GRID_COLS[self.__wumpus_loc[1]]))
     self.__draw_entity("gold", (GRID_ROWS[self.__gold_loc[0]], GRID_COLS[self.__gold_loc[1]]))
     for pit in self.__pits:
-      self.__draw_entity(IMG + "pit", (GRID_ROWS[pit[0]], GRID_COLS[pit[1]]))
+      self.__draw_entity("pit", (GRID_ROWS[pit[0]], GRID_COLS[pit[1]]))
 
     pygame.display.update()
 
@@ -128,6 +139,9 @@ class WumpusWorld:
 
   # Perform an action from the set of legal moves and update the game state.
   def act(self, action):
+    for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
     assert action in self.LEGAL_MOVES, "Illegal Action"
     self.observation[3:] = ["None", "None"]
     self.moves.append(action)

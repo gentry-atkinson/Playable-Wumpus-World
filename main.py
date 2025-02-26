@@ -34,6 +34,8 @@
 from wumpus import WumpusWorld
 from ai import pick_move
 
+
+### MAIN GAME LOOP ###
 if __name__ == '__main__':
   world = WumpusWorld()
   world.draw()
@@ -42,6 +44,7 @@ if __name__ == '__main__':
   while playing:  # Check action count in loop condition
     action = pick_move(world)
     world.act(action)
+    world.draw()
     if world.player_dead() or world.escape:
       playing = False
 
