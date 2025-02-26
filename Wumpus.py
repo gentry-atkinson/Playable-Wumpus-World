@@ -1,9 +1,11 @@
 # Author: Gentry Atkinson
 # Organization: St. Edwards University
 
+import os
+import pygame
 from random import randint
 
-IMG = "/content/drive/MyDrive/Sample_Data/imgs"
+IMG = "imgs"
 
 
 # A class representing the Wumpus World game environment.
@@ -25,7 +27,18 @@ class WumpusWorld:
     self.escape = False
     self.ammo = 1
     self.died = False
+    self.__load_images()
     self.perceive()
+
+  def __load_images(self):
+    self.imgs = {
+      'world' : pygame.image.load(os.path.join(IMG, 'world.png')),
+      'wumpus' : pygame.image.load(os.path.join(IMG, 'wumpus.png')),
+      'breeze' : pygame.image.load(os.path.join(IMG, 'breeze.png')),
+      'stink' : pygame.image.load(os.path.join(IMG, 'stink.png')),
+      'gold' : pygame.image.load(os.path.join(IMG, 'gold.png')),
+      'pit' : pygame.image.load(os.path.join(IMG, 'pit.png')),
+    }    
 
   # Randomly generate pit locations, avoiding start and hazard locations.
   def __generate_pits(self):
@@ -39,17 +52,18 @@ class WumpusWorld:
 
   # Visualize the current state of the Wumpus World environment.
   def draw(self):
-    plt.figure(figsize=(4, 4))
-    ax = plt.gca()
-    ax.get_xaxis().set_visible(False)
-    ax.get_yaxis().set_visible(False)
-    ax.set_xlim((0, self.SIZE))
-    ax.set_ylim((0, self.SIZE))
+    #plt.figure(figsize=(4, 4))
+    #ax = plt.gca()
+    #ax.get_xaxis().set_visible(False)
+    #ax.get_yaxis().set_visible(False)
+    #ax.set_xlim((0, self.SIZE))
+    #ax.set_ylim((0, self.SIZE))
 
     # Draw grid lines.
     for i in range(self.SIZE + 1):
-      plt.axvline(x=i, color="black", linewidth=3.0)
-      plt.axhline(y=i, color="black", linewidth=3.0)
+      #plt.axvline(x=i, color="black", linewidth=3.0)
+      #plt.axhline(y=i, color="black", linewidth=3.0)
+      pass
 
     # Draw entities in the environment.
     self.__draw_entity(IMG + "/player.png", self.player_loc, 0.8, 0.9)
@@ -59,15 +73,15 @@ class WumpusWorld:
     for pit in self.__pits:
       self.__draw_entity(IMG + "/pit.png", pit, 1, 1)
 
-    plt.tight_layout()
+    #plt.tight_layout()
     # plt.savefig("world.png")
-    plt.show()
+    #plt.show()
 
   # Helper function to draw an entity at a specified location.
   def __draw_entity(self, img_path, location, width, height):
     if location:
       icon_x, icon_y = float(location[0] - 1), float(location[1] - 1)
-      plt.imshow(mpimg.imread(img_path), extent=(icon_x, icon_x + width, icon_y, icon_y + height))
+      #plt.imshow(mpimg.imread(img_path), extent=(icon_x, icon_x + width, icon_y, icon_y + height))
 
   # Update the player's observations based on the current state.
   def perceive(self):
