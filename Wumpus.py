@@ -18,7 +18,7 @@ GRID_ROWS = {
 
 GRID_COLS = {
   1 : 118,
-  2 : 162,
+  2 : 262,
   3 : 405,
   4 : 548
 }
@@ -88,11 +88,14 @@ class WumpusWorld:
     self.__draw_entity("world", (0,0))
 
     # Draw entities in the environment.
-    self.__draw_entity("player", (GRID_ROWS[self.player_loc[0]], GRID_COLS[self.player_loc[1]]))
-    self.__draw_entity("wumpus", (GRID_ROWS[self.__wumpus_loc[0]], GRID_COLS[self.__wumpus_loc[1]]))
-    self.__draw_entity("gold", (GRID_ROWS[self.__gold_loc[0]], GRID_COLS[self.__gold_loc[1]]))
+    if self.player_loc:
+      self.__draw_entity("player", (GRID_COLS[self.player_loc[0]], GRID_ROWS[self.player_loc[1]]))
+    if self.__wumpus_loc:
+      self.__draw_entity("wumpus", (GRID_COLS[self.__wumpus_loc[0]], GRID_ROWS[self.__wumpus_loc[1]]))
+    if self.__gold_loc:
+      self.__draw_entity("gold", (GRID_COLS[self.__gold_loc[0]], GRID_ROWS[self.__gold_loc[1]]))
     for pit in self.__pits:
-      self.__draw_entity("pit", (GRID_ROWS[pit[0]], GRID_COLS[pit[1]]))
+      self.__draw_entity("pit", (GRID_COLS[pit[0]], GRID_ROWS[pit[1]]))
 
     pygame.display.update()
 
@@ -113,7 +116,7 @@ class WumpusWorld:
   def __update_observation_for_hazards(self):
     """Check proximity to Wumpus and pits to update observations."""
     # Check for Wumpus proximity.
-    if self.__is_adjacent(self.player_loc, self.__wumpus_loc):
+    if self.__wumpus_loc and self.__is_adjacent(self.player_loc, self.__wumpus_loc):
       self.observation[0] = "Stench"
     # Check for pit proximity.
     for pit in self.__pits:

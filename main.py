@@ -31,8 +31,14 @@
     Possible Actions: "forward", "left", "right", "grab", "climb", "shoot"
 """
 
+COMPUTER_CONTROL = False
+
 from wumpus import WumpusWorld
-from ai import pick_move
+if COMPUTER_CONTROL:
+  from ai import pick_move
+else:
+  def pick_move(world):
+    return input().strip()
 
 
 ### MAIN GAME LOOP ###
@@ -49,6 +55,5 @@ if __name__ == '__main__':
       playing = False
 
   # print(path(world.player_loc, (4,4)))
-  print("Facing",world.facing)
   print(f"Final move list:\n{world.moves}")
   print(f"Final score: {world.score()}")
