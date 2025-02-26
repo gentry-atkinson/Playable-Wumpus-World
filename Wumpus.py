@@ -51,9 +51,9 @@ class WumpusWorld:
   def __init_game(self):
     # Init Game
     pygame.init()
+    self.main_font = pygame.font.Font(os.path.join('font', 'slkscr.ttf'), 40)
     pygame.display.set_caption('Wumpus World')
     clock = pygame.time.Clock()
-    running = True
     pygame.key.set_repeat()
     self.draw()
 
@@ -66,6 +66,8 @@ class WumpusWorld:
       'gold' : pygame.image.load(os.path.join(IMG, 'gold.png')),
       'pit' : pygame.image.load(os.path.join(IMG, 'pit.png')),
       'player' : pygame.image.load(os.path.join(IMG, 'player.png')),
+      'bubble_e' : pygame.image.load(os.path.join(IMG, 'bubble_empty.png')),
+      'bubble_f' : pygame.image.load(os.path.join(IMG, 'bubble_full.png')),
     }
 
   def __load_screen(self):
@@ -97,7 +99,25 @@ class WumpusWorld:
     for pit in self.__pits:
       self.__draw_entity("pit", (GRID_COLS[pit[0]], GRID_ROWS[pit[1]]))
 
+    # Draw Arrow Indicator
+    if self.ammo == 1:
+      self.__draw_entity("bubble_f", (240, 715))
+    else:
+      self.__draw_entity("bubble_e", (240, 715))
+
+    # Draw Gold Indicator
+    if self.has_gold:
+      self.__draw_entity("bubble_f", (600, 715))
+    else:
+      self.__draw_entity("bubble_e", (600, 715))
+
+    # Draw Percepts
+    p_string = [p for p in self.observation if p != "None"]
+    percepts = self.main_font.render(','.join(p_string), 1, (54, 00, 114))
+    self.screen.blit(percepts, (300, 649))
+
     pygame.display.update()
+    pygame.time.delay(500)
 
   # Helper function to draw an entity at a specified location.
   def __draw_entity(self, name: str, location: tuple, width=1, height=1):
