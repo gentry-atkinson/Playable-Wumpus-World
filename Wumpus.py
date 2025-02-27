@@ -10,10 +10,10 @@ WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 800
 
 GRID_ROWS = {
-  1 : 475,
-  2 : 330,
-  3 : 187,
-  4 : 42
+  1 : 528,
+  2 : 383,
+  3 : 240,
+  4 : 95
 }
 
 GRID_COLS = {
@@ -43,6 +43,7 @@ class WumpusWorld:
     self.escape = False
     self.ammo = 1
     self.died = False
+    self.action = None
     self.__load_images()
     self.__load_screen()
     self.__init_game()
@@ -116,6 +117,11 @@ class WumpusWorld:
     percepts = self.main_font.render(','.join(p_string), 1, (54, 00, 114))
     self.screen.blit(percepts, (300, 649))
 
+    # Draw Action
+    if self.action:
+      a_string = self.main_font.render(self.action, 1, (54, 00, 114))
+      self.screen.blit(a_string, (105, 15))
+
     pygame.display.update()
     pygame.time.delay(250)
 
@@ -166,6 +172,7 @@ class WumpusWorld:
             if event.type == pygame.QUIT:
                 exit()
     assert action in self.LEGAL_MOVES, "Illegal Action"
+    self.action = action
     self.observation[3:] = ["None", "None"]
     self.moves.append(action)
     self.__execute_action(action)
